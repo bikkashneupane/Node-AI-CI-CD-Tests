@@ -26,7 +26,7 @@ jobs:
 
       # Install Dependencies
       - name: Install dependencies
-        uses: npm ci
+        run: npm ci
 
       # Compliles TypeScript and build
       - name: Build Project
