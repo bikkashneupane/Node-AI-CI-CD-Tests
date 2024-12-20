@@ -1,0 +1,16 @@
+@rootURL = http://localhost:3000
+@apiEP = {{rootURL}}/api/v1
+@userAPI = {{apiEP}}/users
+
+
+### login
+POST {{userAPI}}
+Content-Type: application/json
+
+{
+    "email":"jondoe@gmail.com",
+    "password":"12345"
+}
+
+### Get All users
+GET {{userAPI}}

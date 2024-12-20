@@ -1,4 +1,5 @@
 import express, { Request, Response } from "express";
+import { userRouter } from "./routes/user";
 
 const app = express();
 const port = 3000;
@@ -8,8 +9,19 @@ app.use(express.json());
 
 // Basic route
 app.get("/", (req: Request, res: Response) => {
-  res.send("Hello, world!");
+  const uptime = process.uptime();
+  const hours: number = Math.floor(uptime / 3600);
+  const minutes: number = Math.floor((uptime % 3600) / 60);
+  const seconds: number = Math.floor(uptime % 60);
+
+  res.status(200).json({
+    message: "Server Is Live.",
+    uptime: `${hours}h ${minutes}m ${seconds}s`,
+  });
 });
+
+// Routes
+app.use("/api/v1/users", userRouter);
 
 // Start the server
 app.listen(port, () => {
