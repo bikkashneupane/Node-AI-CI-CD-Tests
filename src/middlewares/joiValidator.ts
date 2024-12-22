@@ -1,7 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import { IUser } from "../schema/userSchema";
 import Joi from "joi";
-import { IBookBase } from "../interfaces/IBook";
 
 const joiValidator = (
   schema: Joi.ObjectSchema,
@@ -22,7 +20,7 @@ export const validateUser = (
   res: Response,
   next: NextFunction
 ) => {
-  const schema = Joi.object<IUser>({
+  const schema = Joi.object({
     name: Joi.string().required(),
     email: Joi.string().required(),
     password: Joi.string().required(),
@@ -36,7 +34,7 @@ export const validateBook = (
   res: Response,
   next: NextFunction
 ) => {
-  const schema = Joi.object<IBookBase>({
+  const schema = Joi.object({
     name: Joi.string().required(),
     author: Joi.string().required(),
     publishedDate: Joi.date().required(),

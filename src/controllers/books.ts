@@ -1,9 +1,9 @@
 import { BookModel } from "../schema/bookSchema";
-import { IBook, IBookBase } from "../interfaces/IBook";
+import { IBook } from "../interfaces/IBook";
 import mongoose, { FilterQuery, UpdateQuery } from "mongoose";
 
 // Insert
-export const insertBook = (bookObj: IBookBase): Promise<IBook> => {
+export const insertBook = (bookObj: Partial<IBook>): Promise<IBook> => {
   return new BookModel(bookObj).save();
 };
 

@@ -1,11 +1,9 @@
 import { Document } from "mongoose";
 
-export interface IBookBase {
+export interface IBook extends Document {
   name: string;
   author: string;
   publishedDate: Date;
   ratings?: number;
   price: number;
 }
-
-export interface IBook extends IBookBase, Document {}
