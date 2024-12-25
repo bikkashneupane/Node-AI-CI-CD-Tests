@@ -1,7 +1,15 @@
-import mongoose, { Model, Schema } from "mongoose";
-import { IBook } from "../interfaces/IBook";
+import mongoose, { Document, Model, Schema } from "mongoose";
+export interface IBook {
+  name: string;
+  author: string;
+  publishedDate: Date;
+  ratings?: number;
+  price: number;
+}
 
-const schema: Schema<IBook> = new mongoose.Schema<IBook>(
+export interface IBookDocs extends IBook, Document {}
+
+const schema: Schema<IBookDocs> = new mongoose.Schema<IBookDocs>(
   {
     name: { type: String, required: true, index: true },
     author: { type: String, required: true },
@@ -12,4 +20,7 @@ const schema: Schema<IBook> = new mongoose.Schema<IBook>(
   { timestamps: true }
 );
 
-export const BookModel: Model<IBook> = mongoose.model<IBook>("Books", schema);
+export const BookModel: Model<IBookDocs> = mongoose.model<IBookDocs>(
+  "Books",
+  schema
+);

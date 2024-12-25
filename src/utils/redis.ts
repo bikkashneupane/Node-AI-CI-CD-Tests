@@ -1,18 +1,14 @@
 import { createClient } from "redis";
 
-// Create a Redis client
+// Initialize Redis client
 const redisClient = createClient({
   url: "redis://localhost:6379", // Redis server URL (default is localhost and port 6379)
 });
 
-// Connect to Redis
-redisClient.on("connect", () => {
-  console.log("Connected to Redis");
-});
+// Handle connection events
+redisClient
+  .on("connect", () => console.log("Connected to Redis"))
+  .on("error", (err) => console.error("Redis error:", err));
 
-// Error handling
-redisClient.on("error", (err) => {
-  console.error("Redis error:", err);
-});
-
+// Export the Redis client
 export default redisClient;

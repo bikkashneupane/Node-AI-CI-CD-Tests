@@ -47,8 +47,11 @@ app.use((error: HttpError, req: Request, res: Response, next: NextFunction) => {
 });
 
 // Start the server
-app.listen(port, () => {
-  console.log(`Server is running on http://localhost:${port}`);
-});
+// If this file is the entrypoint/ called directly
+if (require.main === module) {
+  app.listen(port, () => {
+    console.log(`Server is running on http://localhost:${port}`);
+  });
+}
 
 export default app;
