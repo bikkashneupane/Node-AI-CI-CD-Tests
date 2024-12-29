@@ -1,6 +1,7 @@
 import express, { NextFunction, Request, Response } from "express";
 import { userRouter } from "./routes/user";
 import { bookRouter } from "./routes/books";
+import rateLimit from "express-rate-limit";
 
 const app = express();
 const port = 3000;
@@ -8,8 +9,27 @@ const port = 3000;
 // Middleware to parse JSON
 app.use(express.json());
 
+// express-rate-limit => 5min, 100 api request allowed
+const globalLimiter = rateLimit({
+  windowMs: 5 * 60 * 1000,
+  limit: 100,
+  standardHeaders: "draft-8",
+  legacyHeaders: false,
+});
+
+// applies to all api(s)
+app.use(globalLimiter);
+
+const userLimiter = rateLimit({
+  windowMs: 10 * 60 * 1000,
+  limit: 100,
+  standardHeaders: "draft-8",
+  legacyHeaders: false,
+});
+
 // Routes
-app.use("/api/v1/users", userRouter);
+// Applies to users api only
+app.use("/api/v1/users", userLimiter, userRouter);
 app.use("/api/v1/books", bookRouter);
 
 // Server route
