@@ -1,13 +1,24 @@
 import express, { NextFunction, Request, Response } from "express";
+import cors from "cors";
+import dotenv from "dotenv";
 import { userRouter } from "./routes/user";
 import { bookRouter } from "./routes/books";
 import rateLimit from "express-rate-limit";
+import { connectMongo } from "./config/mongo";
 
 const app = express();
 const port = 3000;
 
 // Middleware to parse JSON
 app.use(express.json());
+app.use(
+  cors({
+    origin: ["http://localhost:4000"],
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
+    credentials: true,
+  })
+);
+dotenv.config();
 
 // express-rate-limit => 5min, 100 api request allowed
 const globalLimiter = rateLimit({
@@ -65,6 +76,9 @@ app.use((error: HttpError, req: Request, res: Response, next: NextFunction) => {
     error: error.message,
   });
 });
+
+// connect to db;
+connectMongo();
 
 // Start the server
 // If this file is the entrypoint/ called directly
