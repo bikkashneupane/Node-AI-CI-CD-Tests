@@ -5,6 +5,7 @@ import { userRouter } from "./routes/user";
 import { bookRouter } from "./routes/books";
 import rateLimit from "express-rate-limit";
 import { connectMongo } from "./config/mongo";
+import chatRouter from "./routes/chat";
 
 const app = express();
 const port = 3000;
@@ -42,6 +43,7 @@ const userLimiter = rateLimit({
 // Applies to users api only
 app.use("/api/v1/users", userLimiter, userRouter);
 app.use("/api/v1/books", bookRouter);
+app.use("/api/v1/chat", chatRouter);
 
 // Server route
 app.get("/", (req: Request, res: Response) => {
