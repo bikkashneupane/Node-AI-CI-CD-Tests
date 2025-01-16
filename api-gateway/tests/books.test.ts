@@ -9,7 +9,11 @@ import {
   updateBook,
   deleteBook,
 } from "../src/controllers/books";
-import mongoose from "mongoose";
+import { connectMongo } from "../src/config/mongo";
+
+jest.mock("../src/config/mongo", () => ({
+  connectMongo: jest.fn(),
+}));
 
 jest.mock("../src/utils/redis", () => ({
   get: jest.fn(),
@@ -27,10 +31,6 @@ jest.mock("../src/controllers/books", () => ({
 describe("/books GET route ", () => {
   beforeEach(() => jest.clearAllMocks());
 
-  afterAll(async () => {
-    await mongoose.connection.close();
-  });
-
   it("should fetch cached books when available", async () => {
     const mockBook = [
       {
@@ -46,6 +46,7 @@ describe("/books GET route ", () => {
       JSON.stringify(mockBook)
     );
 
+    (connectMongo as jest.Mock).mockResolvedValueOnce(undefined);
     const response = await request(app).get("/api/v1/books");
 
     expect(response.status).toBe(200);
@@ -65,7 +66,7 @@ describe("/books GET route ", () => {
     ];
 
     (redisClient.get as jest.Mock).mockResolvedValue(null);
-
+    (connectMongo as jest.Mock).mockResolvedValueOnce(undefined);
     (getBooks as jest.Mock).mockResolvedValue(mockBook);
 
     const response = await request(app).get("/api/v1/books");
