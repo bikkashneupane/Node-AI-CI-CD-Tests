@@ -22,13 +22,25 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 18
-          cache: npm
+
+      # Cache Node modules for api-gateway
+      - name: Cache Node modules for api-gateway
+        uses: actions/cache@v2
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('api-gateway/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      # Clear npm cache
+      - name: Clear npm cache
+        run: npm cache clean --force
 
       # Install Dependencies for API Gateway and Microservice
       - name: Install dependencies for API Gateway
         run: |
           cd api-gateway
-          npm install
+          npm ci
 
       # Install Dependencies for Each Microservice (if they are in separate folders) Later
 
