@@ -1,7 +1,12 @@
 import request from "supertest";
 import app from "../src/server";
+import mongoose from "mongoose";
 
 describe("Server Test Cases", () => {
+  afterAll(async () => {
+    await mongoose.connection.close();
+  });
+
   it("Should throw an error", () => {
     expect(() => {
       throw new Error("Something failed"); // Fixed typo here

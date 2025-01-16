@@ -9,6 +9,7 @@ import {
   updateBook,
   deleteBook,
 } from "../src/controllers/books";
+import mongoose from "mongoose";
 
 jest.mock("../src/utils/redis", () => ({
   get: jest.fn(),
@@ -25,6 +26,10 @@ jest.mock("../src/controllers/books", () => ({
 
 describe("/books GET route ", () => {
   beforeEach(() => jest.clearAllMocks());
+
+  afterAll(async () => {
+    await mongoose.connection.close();
+  });
 
   it("should fetch cached books when available", async () => {
     const mockBook = [
