@@ -32,9 +32,10 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node-
 
-      # Clear npm cache
-      - name: Clear npm cache
-        run: npm cache clean --force
+      # # Clear npm cache - Remove this if caching issue is resolved/ Readd this to
+      # delete the cache if issue arises
+      # - name: Clear npm cache
+      #   run: npm cache clean --force
 
       # Install Dependencies for API Gateway and Microservice
       - name: Install dependencies for API Gateway
