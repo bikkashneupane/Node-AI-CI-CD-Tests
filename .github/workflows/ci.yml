@@ -28,7 +28,7 @@ jobs:
       - name: Install dependencies for API Gateway
         run: |
           cd api-gateway
-          npm ci
+          npm install
 
       # Install Dependencies for Each Microservice (if they are in separate folders) Later
 
