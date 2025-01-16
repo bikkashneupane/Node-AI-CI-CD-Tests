@@ -22,7 +22,6 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 18
-          cache: false
 
       # Install Dependencies for API Gateway and Microservices
       - name: Install dependencies for API Gateway
