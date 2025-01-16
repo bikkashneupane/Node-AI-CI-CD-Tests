@@ -24,7 +24,7 @@ jobs:
           node-version: 18
           cache: npm
 
-      # Install Dependencies for API Gateway and Microservices
+      # Install Dependencies for API Gateway and Microservice
       - name: Install dependencies for API Gateway
         run: |
           cd api-gateway
