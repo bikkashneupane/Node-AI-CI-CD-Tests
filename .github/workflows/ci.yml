@@ -1,4 +1,4 @@
-name: Node.js CI
+name: Node.js CI for API Gatweay and Microservices
 
 on:
   push:
@@ -32,27 +32,46 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node-
 
+      # Cache Node modules for chat-service
+      - name: Cache Node modules for chat-service
+        uses: actions/cache@v2
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('chat-service/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
       # # Clear npm cache - Remove this if caching issue is resolved/ Readd this to
       # delete the cache if issue arises
       # - name: Clear npm cache
       #   run: npm cache clean --force
 
-      # Install Dependencies for API Gateway and Microservice
+      # Install Dependencies for API Gateway and Microservices
       - name: Install dependencies for API Gateway
         run: |
           cd api-gateway
           npm ci
 
-      # Install Dependencies for Each Microservice (if they are in separate folders) Later
+      # Install Dependencies Chat Microservice
+      - name: Install dependencies for Chat-Service
+        run: |
+          cd chat-service
+          npm ci
 
       # Compile TypeScript for API Gateway and Microservices
       - name: Build API Gateway and Microservices
         run: |
           cd api-gateway
           npm run build
+          cd ..
+          cd chat-service
+          npm run build
 
       # Run Test Cases for API Gateway and Microservices
       - name: Run Test Cases
         run: |
           cd api-gateway
+          npm run test
+          cd ..
+          cd chat-service
           npm run test
