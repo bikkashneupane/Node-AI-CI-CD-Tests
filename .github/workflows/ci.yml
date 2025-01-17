@@ -25,7 +25,7 @@ jobs:
 
       # Cache Node modules for api-gateway
       - name: Cache Node modules for api-gateway
-        uses: actions/cache@v2
+        uses: actions/cache@v4
         with:
           path: ~/.npm
           key: ${{ runner.os }}-node-${{ hashFiles('api-gateway/package-lock.json') }}
@@ -34,7 +34,7 @@ jobs:
 
       # Cache Node modules for user-service
       - name: Cache Node modules for user-service
-        uses: actions/cache@v2
+        uses: actions/cache@v4
         with:
           path: ~/.npm
           key: ${{ runner.os }}-node-${{ hashFiles('user-service/package-lock.json') }}
@@ -43,7 +43,7 @@ jobs:
 
       # Cache Node modules for book-service
       - name: Cache Node modules for book-service
-        uses: actions/cache@v2
+        uses: actions/cache@v4
         with:
           path: ~/.npm
           key: ${{ runner.os }}-node-${{ hashFiles('book-service/package-lock.json') }}
@@ -52,7 +52,7 @@ jobs:
 
       # Cache Node modules for chat-service
       - name: Cache Node modules for chat-service
-        uses: actions/cache@v2
+        uses: actions/cache@v4
         with:
           path: ~/.npm
           key: ${{ runner.os }}-node-${{ hashFiles('chat-service/package-lock.json') }}

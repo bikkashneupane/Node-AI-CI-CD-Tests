@@ -47,7 +47,7 @@ describe("/books GET route ", () => {
     );
 
     (connectMongo as jest.Mock).mockResolvedValueOnce(undefined);
-    const response = await request(app).get("/api/v1/books");
+    const response = await request(app).get("/");
 
     expect(response.status).toBe(200);
     expect(redisClient.get).toHaveBeenCalledWith("cached_books");
@@ -69,7 +69,7 @@ describe("/books GET route ", () => {
     (connectMongo as jest.Mock).mockResolvedValueOnce(undefined);
     (getBooks as jest.Mock).mockResolvedValue(mockBook);
 
-    const response = await request(app).get("/api/v1/books");
+    const response = await request(app).get("/");
     expect(response.status).toBe(200);
     expect(redisClient.get).toHaveBeenCalledWith("cached_books");
     expect(getBooks).toHaveBeenCalledWith({});
