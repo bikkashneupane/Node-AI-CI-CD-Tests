@@ -1,25 +1,2 @@
-@rootURL = http://localhost:3000
-@apiEP = {{rootURL}}/api/v1
-@userAPI = {{apiEP}}/users
-@chatAPT = {{apiEP}}/chat
-
-
-### login
-POST {{userAPI}}
-Content-Type: application/json
-
-{
-    "email":"jondoe@gmail.com",
-    "password":"12345"
-}
-
-### Get All users
-GET {{userAPI}}
-
-### POST A NEW PROMPT TO CHATGPT
-POST http://localhost:3000/api/v1/chat
-Content-Type: application/json
-
-{
-    "prompt":"What is the largest ocean in the world"
-}
+### books 
+GET http://localhost:3003/api/v1/books

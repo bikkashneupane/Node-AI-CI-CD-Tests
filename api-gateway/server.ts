@@ -2,6 +2,7 @@ import express, { NextFunction, Request, Response } from "express";
 import "dotenv/config";
 import cors from "cors";
 import rateLimit from "express-rate-limit";
+import axios from "axios";
 
 const app = express();
 const port = 3000;
@@ -35,10 +36,17 @@ const userLimiter = rateLimit({
 });
 
 // Routes
-// Applies to users api only
-// app.use("/api/v1/users", userLimiter, userRouter);
-// app.use("/api/v1/books", bookRouter);
 // Use axios to make a request to chat-service, user-service and book-service
+app.use("/books", async (req: Request, res: Response, next: NextFunction) => {
+  axios
+    .get("http://localhost:3003/api/v1/books")
+    .then((response) => {
+      console.log(response.data);
+    })
+    .catch((error) => {
+      console.error("Error fetching books:", error);
+    });
+});
 
 // Server route
 app.get("/", (req: Request, res: Response) => {

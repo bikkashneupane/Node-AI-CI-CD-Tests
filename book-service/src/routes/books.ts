@@ -9,28 +9,31 @@ const router = express.Router();
 // GET
 router.get("/", async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const cacheKey: string = "cached_books";
+    const cacheKey = "cached_books";
+
+    // Ensure Redis client is connected
+    if (!redisClient.isOpen) {
+      console.warn("Redis client is not connected. Reconnecting...");
+      await redisClient.connect();
+    }
 
     // Attempt to fetch cached data
-    const cachedBooks = await redisClient.get(cacheKey).catch((redisError) => {
-      console.error("Error fetching from Redis:", redisError);
-      return null;
-    });
-
+    // Attempt to fetch cached data
+    const cachedBooks = await redisClient.get(cacheKey);
     if (cachedBooks) {
-      res.status(200).json({ books: JSON.parse(cachedBooks) });
+      res.status(200).json(JSON.parse(cachedBooks));
       return;
     }
 
-    // get book
-    const books = await getBooks({});
-    if (!books || books.length === 0) {
-      return next({ message: "Books not found", status: 404 });
-    }
+    // // Fetch books from database
+    // const books = await getBooks({});
+    // if (!books || books.length === 0) {
+    //   return next({ message: "Books not found", status: 404 });
+    // }
 
-    // Cache the books for 60 seconds and respond
-    await redisClient.setEx(cacheKey, 60, JSON.stringify(books));
-    res.status(200).json({ books });
+    // // Cache books and respond
+    // await redisClient.setEx(cacheKey, 60, JSON.stringify(books));
+    res.status(200).json({ books: [{ name: "Banana" }] });
   } catch (error) {
     next(error);
   }
