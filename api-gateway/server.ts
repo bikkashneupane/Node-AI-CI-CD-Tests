@@ -1,11 +1,7 @@
 import express, { NextFunction, Request, Response } from "express";
 import "dotenv/config";
 import cors from "cors";
-import dotenv from "dotenv";
-import { userRouter } from "./routes/user";
-import { bookRouter } from "./routes/books";
 import rateLimit from "express-rate-limit";
-import { connectMongo } from "./config/mongo";
 
 const app = express();
 const port = 3000;
@@ -19,7 +15,6 @@ app.use(
     credentials: true,
   })
 );
-dotenv.config();
 
 // express-rate-limit => 5min, 100 api request allowed
 const globalLimiter = rateLimit({
@@ -41,9 +36,9 @@ const userLimiter = rateLimit({
 
 // Routes
 // Applies to users api only
-app.use("/api/v1/users", userLimiter, userRouter);
-app.use("/api/v1/books", bookRouter);
-// Use axios to make a request to chat-service
+// app.use("/api/v1/users", userLimiter, userRouter);
+// app.use("/api/v1/books", bookRouter);
+// Use axios to make a request to chat-service, user-service and book-service
 
 // Server route
 app.get("/", (req: Request, res: Response) => {
@@ -78,9 +73,6 @@ app.use((error: HttpError, req: Request, res: Response, next: NextFunction) => {
     error: error.message,
   });
 });
-
-// connect to db;
-connectMongo();
 
 // Start the server
 // If this file is the entrypoint/ called directly

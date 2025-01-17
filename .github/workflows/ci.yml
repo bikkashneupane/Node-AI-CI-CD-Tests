@@ -32,6 +32,24 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node-
 
+      # Cache Node modules for user-service
+      - name: Cache Node modules for user-service
+        uses: actions/cache@v2
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('user-service/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      # Cache Node modules for book-service
+      - name: Cache Node modules for book-service
+        uses: actions/cache@v2
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('book-service/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
       # Cache Node modules for chat-service
       - name: Cache Node modules for chat-service
         uses: actions/cache@v2
@@ -52,7 +70,17 @@ jobs:
           cd api-gateway
           npm ci
 
-      # Install Dependencies Chat Microservice
+      # Install Dependencies For Microservices (User, Book, Chat)
+      - name: Install dependencies for User-Service
+        run: |
+          cd user-service
+          npm ci
+
+      - name: Install dependencies for Book-Service
+        run: |
+          cd book-service
+          npm ci
+
       - name: Install dependencies for Chat-Service
         run: |
           cd chat-service
@@ -64,13 +92,19 @@ jobs:
           cd api-gateway
           npm run build
           cd ..
+          cd user-service
+          npm run build
+          cd ..
+          cd book-service
+          npm run build
+          cd ..
           cd chat-service
           npm run build
 
       # Run Test Cases for API Gateway and Microservices
       - name: Run Test Cases
         run: |
-          cd api-gateway
+          cd book-service
           npm run test
           cd ..
           cd chat-service
