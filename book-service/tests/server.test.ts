@@ -1,5 +1,5 @@
 import request from "supertest";
-import app from "../src/server";
+import app from "../src";
 import { connectMongo } from "../src/config/mongo";
 
 jest.mock("../src/config/mongo", () => ({
