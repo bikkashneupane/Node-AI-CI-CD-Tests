@@ -1,5 +1,5 @@
 import { Router, Request, Response, NextFunction } from "express";
-import openai from "../config/openAIConfig";
+import openai from "../config/openaiConfig";
 
 const router = Router();
 

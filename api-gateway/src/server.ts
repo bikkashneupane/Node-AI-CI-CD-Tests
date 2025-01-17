@@ -1,11 +1,11 @@
 import express, { NextFunction, Request, Response } from "express";
+import "dotenv/config";
 import cors from "cors";
 import dotenv from "dotenv";
 import { userRouter } from "./routes/user";
 import { bookRouter } from "./routes/books";
 import rateLimit from "express-rate-limit";
 import { connectMongo } from "./config/mongo";
-import chatRouter from "./routes/chat";
 
 const app = express();
 const port = 3000;
@@ -43,7 +43,7 @@ const userLimiter = rateLimit({
 // Applies to users api only
 app.use("/api/v1/users", userLimiter, userRouter);
 app.use("/api/v1/books", bookRouter);
-app.use("/api/v1/chat", chatRouter);
+// Use axios to make a request to chat-service
 
 // Server route
 app.get("/", (req: Request, res: Response) => {

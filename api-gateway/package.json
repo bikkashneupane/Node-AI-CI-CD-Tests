@@ -5,7 +5,7 @@
   "scripts": {
     "start": "node ./dist/server.js",
     "build": "tsc",
-    "dev": "nodemon --require dotenv/config ./src/server.ts",
+    "dev": "nodemon ./src/server.ts",
     "test": "jest --detectOpenHandles"
   },
   "keywords": [],
