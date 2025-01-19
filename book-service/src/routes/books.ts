@@ -15,7 +15,7 @@ router.get(
       // Attempt to fetch cached data
       const cachedBooks = await redisClient.get(cacheKey);
       if (cachedBooks) {
-        res.status(200).json(JSON.parse(cachedBooks));
+        res.status(200).json({ books: JSON.parse(cachedBooks) });
         return;
       }
 
@@ -28,7 +28,7 @@ router.get(
 
       // Cache books and respond
       await redisClient.setEx(cacheKey, 60, JSON.stringify(books));
-      res.status(200).json({ books: [{ name: "Banana" }] });
+      res.status(200).json({ books });
     } catch (error) {
       next(error);
     }

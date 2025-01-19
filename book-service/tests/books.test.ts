@@ -2,13 +2,7 @@ import request from "supertest";
 import app from "../src";
 import redisClient from "../src/utils/redis";
 
-import {
-  insertBook,
-  getBooks,
-  getSingleBook,
-  updateBook,
-  deleteBook,
-} from "../src/controllers/books";
+import { getBooks } from "../src/controllers/books";
 import { connectMongo } from "../src/config/mongo";
 
 jest.mock("../src/config/mongo", () => ({
