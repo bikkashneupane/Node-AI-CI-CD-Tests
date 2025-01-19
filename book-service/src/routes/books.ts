@@ -1,4 +1,4 @@
-import express, { NextFunction, Request, Response, Router } from "express";
+import express, { NextFunction, Request, Response } from "express";
 import { validateBook } from "../middlewares/joiValidator";
 import { getBooks, insertBook } from "../controllers/books";
 import redisClient from "../utils/redis";
@@ -7,37 +7,33 @@ import { IBook, IBookDocs } from "../schema/bookSchema";
 const router = express.Router();
 
 // GET
-router.get("/", async (req: Request, res: Response, next: NextFunction) => {
-  try {
+router.get(
+  "/",
+  async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     const cacheKey = "cached_books";
+    try {
+      // Attempt to fetch cached data
+      const cachedBooks = await redisClient.get(cacheKey);
+      if (cachedBooks) {
+        res.status(200).json(JSON.parse(cachedBooks));
+        return;
+      }
 
-    // Ensure Redis client is connected
-    if (!redisClient.isOpen) {
-      console.warn("Redis client is not connected. Reconnecting...");
-      await redisClient.connect();
+      // Fetch books from database
+      const books = await getBooks({});
+      if (!books || books.length === 0) {
+        next({ message: "Books not found", status: 404 });
+        return;
+      }
+
+      // Cache books and respond
+      await redisClient.setEx(cacheKey, 60, JSON.stringify(books));
+      res.status(200).json({ books: [{ name: "Banana" }] });
+    } catch (error) {
+      next(error);
     }
-
-    // Attempt to fetch cached data
-    // Attempt to fetch cached data
-    const cachedBooks = await redisClient.get(cacheKey);
-    if (cachedBooks) {
-      res.status(200).json(JSON.parse(cachedBooks));
-      return;
-    }
-
-    // // Fetch books from database
-    // const books = await getBooks({});
-    // if (!books || books.length === 0) {
-    //   return next({ message: "Books not found", status: 404 });
-    // }
-
-    // // Cache books and respond
-    // await redisClient.setEx(cacheKey, 60, JSON.stringify(books));
-    res.status(200).json({ books: [{ name: "Banana" }] });
-  } catch (error) {
-    next(error);
   }
-});
+);
 
 // POST
 router.post(
@@ -65,4 +61,4 @@ router.post(
   }
 );
 
-export const bookRouter: Router = router;
+export const bookRouter = router;

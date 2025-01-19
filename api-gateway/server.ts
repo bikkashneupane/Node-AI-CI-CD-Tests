@@ -38,14 +38,19 @@ const userLimiter = rateLimit({
 // Routes
 // Use axios to make a request to chat-service, user-service and book-service
 app.use("/books", async (req: Request, res: Response, next: NextFunction) => {
-  axios
-    .get("http://localhost:3003/api/v1/books")
-    .then((response) => {
-      console.log(response.data);
-    })
-    .catch((error) => {
-      console.error("Error fetching books:", error);
-    });
+  try {
+    const response = await axios.get("http://localhost:3003/api/v1/books");
+    res.json(response.data);
+  } catch (error: any) {
+    // Handle axios related errors
+    if (axios.isAxiosError(error)) {
+      return next({
+        status: error.response?.status || 500,
+        message: error.response?.data?.error,
+      });
+    }
+    next(error);
+  }
 });
 
 // Server route

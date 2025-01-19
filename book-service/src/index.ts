@@ -5,6 +5,7 @@ import "dotenv/config";
 import { envConfig } from "./config/envConfig";
 import { bookRouter } from "./routes/books";
 import { connectMongo } from "./config/mongo";
+import redisClient from "./utils/redis";
 
 const app = express();
 
@@ -49,10 +50,32 @@ app.use((error: HttpError, req: Request, res: Response, next: NextFunction) => {
 
 // Start the server
 // This block of code will only run if the file is executed directly
+let server: any; // Reference to the server instance
 if (require.main === module) {
-  app.listen(envConfig.PORT, () => {
+  server = app.listen(envConfig.PORT, () => {
     console.log(`Server is running on http://localhost:${envConfig.PORT}`);
   });
 }
+
+// Graceful shutdown logic
+const shutdown = async () => {
+  console.log("\nShutting down server...");
+  if (server) {
+    server.close(() => {
+      console.log("HTTP server closed.");
+    });
+  }
+
+  if (redisClient.isOpen) {
+    await redisClient.disconnect();
+    console.log("Redis client disconnected.");
+  }
+
+  process.exit(0); // Exit process
+};
+
+// Capture termination signals
+process.on("SIGINT", shutdown); // Handle Ctrl+C
+process.on("SIGTERM", shutdown); // Handle termination signals in production
 
 export default app;
