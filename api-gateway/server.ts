@@ -2,7 +2,10 @@ import express, { NextFunction, Request, Response } from "express";
 import "dotenv/config";
 import cors from "cors";
 import rateLimit from "express-rate-limit";
-import axios from "axios";
+import { userRouter, chatRouter, bookRouter } from "./src/routes/appRoutes";
+import morgan from "morgan";
+import logger from "./src/utils/logger";
+const morganFormat = ":method :url :status :response-time ms";
 
 const app = express();
 const port = 3000;
@@ -17,6 +20,23 @@ app.use(
   })
 );
 
+// morgan logger middleware
+app.use(
+  morgan(morganFormat, {
+    stream: {
+      write: (message) => {
+        const logObject = {
+          method: message.split(" ")[0],
+          url: message.split(" ")[1],
+          status: message.split(" ")[2],
+          responseTime: message.split(" ")[3],
+        };
+        logger.info(JSON.stringify(logObject));
+      },
+    },
+  })
+);
+
 // express-rate-limit => 5min, 100 api request allowed
 const globalLimiter = rateLimit({
   windowMs: 5 * 60 * 1000,
@@ -28,6 +48,7 @@ const globalLimiter = rateLimit({
 // applies to all api(s)
 app.use(globalLimiter);
 
+// express-rate-limit for user api
 const userLimiter = rateLimit({
   windowMs: 10 * 60 * 1000,
   limit: 100,
@@ -36,22 +57,10 @@ const userLimiter = rateLimit({
 });
 
 // Routes
-// Use axios to make a request to chat-service, user-service and book-service
-app.use("/books", async (req: Request, res: Response, next: NextFunction) => {
-  try {
-    const response = await axios.get("http://localhost:3003/api/v1/books");
-    res.json(response.data);
-  } catch (error: any) {
-    // Handle axios related errors
-    if (axios.isAxiosError(error)) {
-      return next({
-        status: error.response?.status || 500,
-        message: error.response?.data?.error,
-      });
-    }
-    next(error);
-  }
-});
+// user, chat, book services
+app.use("/users", userLimiter, userRouter);
+app.use("/chat", chatRouter);
+app.use("/books", bookRouter);
 
 // Server route
 app.get("/", (req: Request, res: Response) => {

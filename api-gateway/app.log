@@ -1,0 +1,4 @@
+{"level":"\u001b[32minfo\u001b[39m","message":"{\"method\":\"GET\",\"url\":\"/books\",\"status\":\"500\",\"responseTime\":\"54.004\"}","timestamp":"2025-01-20T03:39:49.677Z"}
+{"level":"\u001b[32minfo\u001b[39m","message":"{\"method\":\"GET\",\"url\":\"/books\",\"status\":\"500\",\"responseTime\":\"4.649\"}","timestamp":"2025-01-20T03:41:51.082Z"}
+{"level":"\u001b[32minfo\u001b[39m","message":"{\"method\":\"GET\",\"url\":\"/books\",\"status\":\"404\",\"responseTime\":\"79.019\"}","timestamp":"2025-01-20T03:42:30.881Z"}
+{"level":"\u001b[32minfo\u001b[39m","message":"{\"method\":\"GET\",\"url\":\"/books\",\"status\":\"404\",\"responseTime\":\"9.819\"}","timestamp":"2025-01-20T03:43:38.005Z"}
