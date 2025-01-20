@@ -15,7 +15,8 @@ let users = [
 router.get("/", async (req: Request, res: Response, next: NextFunction) => {
   try {
     const users = await getUsers({});
-    users.length > 0
+    console.log(users, "users");
+    users?.length > 0
       ? res.json({ users })
       : next({ status: 404, message: "No users found" });
   } catch (error) {
@@ -25,7 +26,7 @@ router.get("/", async (req: Request, res: Response, next: NextFunction) => {
 
 // POST
 router.post(
-  "/signup",
+  "/",
   validateUser,
   async (req: Request, res: Response, next: NextFunction) => {
     try {
