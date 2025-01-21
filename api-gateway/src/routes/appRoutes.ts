@@ -9,7 +9,7 @@ userRouter.use(
   "/",
   createProxyMiddleware("http://localhost:3001/api/v1/users")
 );
-chatRouter.use("/", createProxyMiddleware("http://localhost:3002/api/v1/chat"));
+chatRouter.use("/", createProxyMiddleware("http://localhost:3003/api/v1/chat"));
 bookRouter.use(
   "/",
   createProxyMiddleware("http://localhost:3002/api/v1/books")

@@ -59,10 +59,10 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node-
 
-      # # Clear npm cache - Remove this if caching issue is resolved/ Readd this to
-      # delete the cache if issue arises
-      - name: Clear npm cache
-        run: npm cache clean --force
+      # # # Clear npm cache - Remove this if caching issue is resolved/ Readd this to
+      # # delete the cache if issue arises
+      # - name: Clear npm cache
+      #   run: npm cache clean --force
 
       # Install Dependencies for API Gateway and Microservices
       - name: Install dependencies for API Gateway
@@ -108,4 +108,7 @@ jobs:
           npm run test
           cd ..
           cd chat-service
+          npm run test
+          cd ..
+          cd user-service
           npm run test
